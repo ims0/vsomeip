@@ -125,6 +125,9 @@ std::shared_ptr<plugin> plugin_manager_impl::get_plugin(plugin_type_e _type, std
 std::shared_ptr<plugin> plugin_manager_impl::load_plugin(const std::string& _library,
         plugin_type_e _type, uint32_t _version) {
     void* handle = load_library(_library);
+    if (!handle) {
+		VSOMEIP_ERROR << "Loading failed: (" << dlerror() << ")";
+    }
     plugin_init_func its_init_func = reinterpret_cast<plugin_init_func>(
             load_symbol(handle, VSOMEIP_PLUGIN_INIT_SYMBOL));
     if (its_init_func) {
