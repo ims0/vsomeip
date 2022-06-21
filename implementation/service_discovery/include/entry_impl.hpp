@@ -32,6 +32,7 @@ public:
 
     // public interface
     entry_type_e get_type() const;
+    std::string get_type_str() const;
 
     service_t get_service() const;
     void set_service(service_t _service);

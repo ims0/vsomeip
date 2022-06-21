@@ -1070,6 +1070,8 @@ service_discovery_impl::on_message(
         expired_ports_t expired_ports;
         sd_acceptance_state_t accept_state(expired_ports);
 
+        std::stringstream service_msg;
+        service_msg << "sdi::on_msg: ";
         for (auto iter = its_entries.begin(); iter != its_end; iter++) {
             if (!sd_acceptance_queried) {
                 sd_acceptance_queried = true;
@@ -1092,6 +1094,10 @@ service_discovery_impl::on_message(
                     accept_state.accept_entries_ = true;
                 }
             }
+            service_msg << std::hex << std::setw(2) << "[" <<(int)(*iter)->get_service() << "."
+                        << (int)(*iter)->get_instance() << "]"
+                        << (*iter)->get_type_str() << ";";
+
             if ((*iter)->is_service_entry()) {
                 std::shared_ptr<serviceentry_impl> its_service_entry
                     = std::dynamic_pointer_cast<serviceentry_impl>(*iter);
@@ -1124,6 +1130,7 @@ service_discovery_impl::on_message(
 
             }
         }
+        VSOMEIP_DEBUG << service_msg.str();
 
         {
             std::unique_lock<std::recursive_mutex> its_lock(its_acknowledgement->get_lock());
@@ -1148,6 +1155,18 @@ service_discovery_impl::on_message(
             }
         }
         if (!its_resubscribes.empty()) {
+            std::stringstream msg;
+            msg << "sdi::send sub,"<< std::hex << std::setw(2) << "entries:";
+            for (const auto &m : its_resubscribes) {
+                if (m->has_entry()){
+                    const auto &ent = m->get_entries();
+                    for(const auto &it : ent){
+                      msg<<"[" << it->get_service()<<":"<<it->get_instance()<<"] ";
+                      msg<<it->get_type_str() << "; ";
+                    }
+                }
+            }
+            VSOMEIP_DEBUG << msg.str();
             serialize_and_send(its_resubscribes, _sender);
         }
     } else {
@@ -1479,6 +1498,8 @@ service_discovery_impl::process_offerservice_serviceentry(
                         }
                     }
                 }
+            } else {
+                    VSOMEIP_DEBUG << std::hex<< "["<< _service << ":"<< _instance <<"] eventgroup is null";
             }
         }
     }

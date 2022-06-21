@@ -34,7 +34,6 @@ namespace vsomeip_v3 {
 class runtime;
 class configuration;
 class routing_manager;
-class routing_manager_stub;
 
 class application_impl: public application,
         public routing_manager_host,

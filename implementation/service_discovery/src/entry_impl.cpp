@@ -47,6 +47,27 @@ entry_type_e entry_impl::get_type() const {
     return type_;
 }
 
+std::string entry_impl::get_type_str() const {
+    switch(type_){
+        case entry_type_e::FIND_SERVICE:
+            return "FIND_SERVICE";
+        case entry_type_e::OFFER_SERVICE:
+            return ttl_ > 0 ? "OFFER_SERVICE" : "STOP_SERVICE";
+        case entry_type_e::REQUEST_SERVICE:
+            return "REQUEST_SERVICE";
+        case entry_type_e::FIND_EVENT_GROUP:
+            return "FIND_EVENT_GROUP";
+        case entry_type_e::PUBLISH_EVENTGROUP:
+            return ttl_ > 0 ? "PUBLISH_EVENTGROUP" : "STOP_PUBLISH_EVENTGROUP";
+        case entry_type_e::SUBSCRIBE_EVENTGROUP:
+            return ttl_ > 0 ? "SUB" : "STOP_SUB";
+        case entry_type_e::SUBSCRIBE_EVENTGROUP_ACK:
+            return ttl_ > 0 ? "ACK" : "NACK";
+        default:
+            return "UNKNOWN";
+    }
+}
+
 void entry_impl::set_type(entry_type_e _type) {
     type_ = _type;
 }
