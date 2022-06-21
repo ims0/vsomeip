@@ -6,6 +6,7 @@
 cmake_minimum_required (VERSION 2.8.12)
 project (vsomeip)
 
+set (CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set (VSOMEIP_NAME vsomeip3)
 set (VSOMEIP_COMPAT_NAME vsomeip)
 
