@@ -1,0 +1,39 @@
+1. routing manager[host]
+host io thread
+#0  vsomeip_v3::local_client_endpoint_impl::send_queued (this=0x7fffe0001070) at /home/csy/vsomeip/implementation/endpoints/src/local_client_endpoint_impl.cpp:206
+#1  0x00007ffff7e236c9 in vsomeip_v3::local_client_endpoint_impl::send () at /home/csy/vsomeip/implementation/endpoints/src/local_client_endpoint_impl.cpp:396
+#2  0x00007ffff7eae494 in vsomeip_v3::routing_manager_base::send_local () at /usr/include/c++/9/bits/shared_ptr_base.h:1020
+#3  0x00007ffff7eceb6e in vsomeip_v3::routing_manager_impl::deliver_notification () at /home/csy/vsomeip/implementation/routing/src/routing_manager_impl.cpp:1937
+#4  0x00007ffff7ed57b6 in vsomeip_v3::routing_manager_impl::on_message () at /home/csy/vsomeip/implementation/routing/src/routing_manager_impl.cpp:1452
+#5  0x00007ffff7e5cecd in vsomeip_v3::tcp_client_endpoint_impl::receive_cbk ()
+
+2. routing manager[proxy]
+io thread
+    std::make_shared<sync_handler>([handler, _message]() { handler(_message); });
+#0  vsomeip_v3::application_impl::on_message () at /home/csy/vsomeip/implementation/runtime/src/application_impl.cpp:1476
+#1  0x00007ffff7ef9c4b in vsomeip_v3::routing_manager_proxy::on_message ()
+#2  0x00007ffff7e3141c in vsomeip_v3::local_server_endpoint_impl::connection::receive_cbk()
+
+dispatch thread
+#0  client_sample::on_message (this=0x7fffffffe150, _response=std::shared_ptr<vsomeip_v3::message> (use count 1, weak count 0) = {...}) at /home/csy/vsomeip/examples/lidar/client.cpp:73
+#1  0x00007ffff7f31428 in std::function<void ()>::operator()() const (this=<optimized out>) at /usr/include/c++/9/bits/std_function.h:683
+#2  vsomeip_v3::application_impl::invoke_handler (this=0x55555556e940, _handler=std::shared_ptr<vsomeip_v3::application_impl::sync_handler> (use count 1, weak count 0) = {...})
+    at /home/csy/vsomeip/implementation/runtime/src/application_impl.cpp:1818
+#3  0x00007ffff7f32272 in vsomeip_v3::application_impl::main_dispatch (this=0x55555556e940) at /home/csy/vsomeip/implementation/runtime/src/application_impl.cpp:1606
+
+
+
+2. routing manager[host/proxy]
+io thread
+#0  vsomeip_v3::application_impl::on_message () at /home/csy/vsomeip/implementation/runtime/src/application_impl.cpp:1476
+#1  0x00007ffff7ecc19e in vsomeip_v3::routing_manager_impl::deliver_message () at /usr/include/c++/9/bits/shared_ptr_base.h:756
+#2  0x00007ffff7ecebf1 in vsomeip_v3::routing_manager_impl::deliver_notification ()    at /home/csy/vsomeip/implementation/routing/src/routing_manager_impl.cpp:1932
+#3  0x00007ffff7ed57b6 in vsomeip_v3::routing_manager_impl::on_message () at /home/csy/vsomeip/implementation/routing/src/routing_manager_impl.cpp:1452
+#4  0x00007ffff7e5cecd in vsomeip_v3::tcp_client_endpoint_impl::receive_cbk ()
+
+dispatch thread
+#0  client_sample::on_message (this=0x7fffffffe170, _response=std::shared_ptr<vsomeip_v3::message> (use count 1, weak count 0) = {...}) at /home/csy/vsomeip/examples/lidar/client.cpp:73
+#1  0x00007ffff7f31428 in std::function<void ()>::operator()() const (this=<optimized out>) at /usr/include/c++/9/bits/std_function.h:683
+#2  vsomeip_v3::application_impl::invoke_handler (this=0x55555556e940, _handler=std::shared_ptr<vsomeip_v3::application_impl::sync_handler> (use count 1, weak count 0) = {...})
+    at /home/csy/vsomeip/implementation/runtime/src/application_impl.cpp:1818
+#3  0x00007ffff7f32272 in vsomeip_v3::application_impl::main_dispatch (this=0x55555556e940) at /home/csy/vsomeip/implementation/runtime/src/application_impl.cpp:1606
