@@ -98,7 +98,9 @@ void client_sample::subscribe_event() {
   std::set<vsomeip::eventgroup_t> its_groups;
   its_groups.insert(kEventGroupId);
   app_->request_event(kPointCloudServiceId, kLeftInstanceId, kEventId,
-                      its_groups, vsomeip::event_type_e::ET_FIELD);
+                      its_groups, vsomeip::event_type_e::ET_EVENT);
+  // ET_FIELD ::If the packet content is the same, do not forward it
+  // ET_EVENT ::If the packet content is the same, also forward it
   app_->subscribe(kPointCloudServiceId, kLeftInstanceId, kEventGroupId,
                   kCurrentMajor);
 }

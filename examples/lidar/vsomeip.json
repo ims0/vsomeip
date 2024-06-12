@@ -21,7 +21,11 @@
         {
             "service" : "0x4030",
             "instance" : "0x0001",
-            "unreliable" : "55120"
+            "unreliable" : "55120",
+            "someip-tp" : {
+                 "service-to-client" : [ "0x9001" ]
+             }
+
         }
     ],
 
